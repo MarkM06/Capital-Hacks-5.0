@@ -1,0 +1,124 @@
+{
+  "jurisdiction": "City of Capitol Falls (sample jurisdiction)",
+  "code_name": "Capitol Falls Unified Development Code",
+  "disclaimer": "Fictional sample code for demonstration. Replace this file with a real city's code to deploy.",
+  "districts": {
+    "R-1": {
+      "name": "Single-Family Residential",
+      "section": "UDC 4.2",
+      "min_lot_area_sqft": 6000,
+      "lot_area_per_unit_sqft": 6000,
+      "max_height_ft": 35,
+      "max_stories": 2.5,
+      "setbacks_ft": {"front": 25, "side": 7, "rear": 25},
+      "max_lot_coverage_pct": 40,
+      "max_far": 0.5,
+      "permitted_uses": ["single_family", "adu", "home_occupation", "accessory_structure"],
+      "conditional_uses": ["daycare", "place_of_worship"]
+    },
+    "R-2": {
+      "name": "Two-Family Residential",
+      "section": "UDC 4.3",
+      "min_lot_area_sqft": 5000,
+      "lot_area_per_unit_sqft": 2500,
+      "max_height_ft": 35,
+      "max_stories": 3,
+      "setbacks_ft": {"front": 20, "side": 5, "rear": 20},
+      "max_lot_coverage_pct": 45,
+      "max_far": 0.75,
+      "permitted_uses": ["single_family", "duplex", "adu", "home_occupation", "accessory_structure"],
+      "conditional_uses": ["daycare", "triplex"]
+    },
+    "R-3": {
+      "name": "Multifamily Residential",
+      "section": "UDC 4.4",
+      "min_lot_area_sqft": 5000,
+      "lot_area_per_unit_sqft": 1000,
+      "max_height_ft": 50,
+      "max_stories": 4,
+      "setbacks_ft": {"front": 15, "side": 5, "rear": 15},
+      "max_lot_coverage_pct": 60,
+      "max_far": 2.0,
+      "permitted_uses": ["single_family", "duplex", "triplex", "multifamily", "adu", "home_occupation", "accessory_structure"],
+      "conditional_uses": ["daycare", "office"]
+    },
+    "MU": {
+      "name": "Mixed Use Corridor",
+      "section": "UDC 4.6",
+      "min_lot_area_sqft": 2500,
+      "lot_area_per_unit_sqft": 500,
+      "max_height_ft": 65,
+      "max_stories": 5,
+      "setbacks_ft": {"front": 0, "side": 0, "rear": 10},
+      "max_lot_coverage_pct": 85,
+      "max_far": 3.5,
+      "permitted_uses": ["multifamily", "retail", "restaurant", "office", "personal_services", "home_occupation", "daycare"],
+      "conditional_uses": ["bar", "light_manufacturing", "drive_through"]
+    },
+    "C-1": {
+      "name": "Neighborhood Commercial",
+      "section": "UDC 4.7",
+      "min_lot_area_sqft": 3000,
+      "lot_area_per_unit_sqft": null,
+      "max_height_ft": 40,
+      "max_stories": 3,
+      "setbacks_ft": {"front": 10, "side": 0, "rear": 15},
+      "max_lot_coverage_pct": 75,
+      "max_far": 1.5,
+      "permitted_uses": ["retail", "restaurant", "office", "personal_services", "daycare"],
+      "conditional_uses": ["bar", "drive_through", "multifamily"]
+    }
+  },
+  "adu": {
+    "section": "UDC 6.3",
+    "max_floor_area_sqft": 800,
+    "max_pct_of_primary": 50,
+    "max_height_ft": 20,
+    "min_side_rear_setback_ft": 5,
+    "max_per_lot": 1,
+    "parking_required": 0
+  },
+  "parking": {
+    "section": "UDC 7.1",
+    "per_unit": {"single_family": 2, "duplex": 1.5, "triplex": 1.5, "multifamily": 1, "adu": 0},
+    "per_1000_sqft": {"retail": 3, "restaurant": 8, "office": 2.5, "personal_services": 3, "daycare": 2, "bar": 10, "light_manufacturing": 1, "drive_through": 4},
+    "mu_reduction_pct": 50
+  },
+  "submittals": {
+    "section": "UDC 2.4",
+    "by_project_type": {
+      "new_construction": ["site_plan", "floor_plans", "elevations", "structural_calcs", "energy_compliance", "survey"],
+      "addition": ["site_plan", "floor_plans", "elevations", "structural_calcs"],
+      "adu": ["site_plan", "floor_plans", "elevations", "utility_plan"],
+      "change_of_use": ["floor_plans", "occupancy_letter", "parking_plan"],
+      "tenant_improvement": ["floor_plans", "occupancy_letter"],
+      "accessory_structure": ["site_plan"]
+    },
+    "labels": {
+      "site_plan": "Site plan showing property lines, structures and setbacks",
+      "floor_plans": "Dimensioned floor plans",
+      "elevations": "Exterior elevations with height dimensions",
+      "structural_calcs": "Structural calculations (stamped)",
+      "energy_compliance": "Energy code compliance forms",
+      "survey": "Boundary survey",
+      "utility_plan": "Utility connection plan (water/sewer/electric)",
+      "occupancy_letter": "Occupancy classification letter",
+      "parking_plan": "Parking layout / count"
+    }
+  },
+  "sections": [
+    {"id": "UDC 2.4", "title": "Application Submittal Requirements", "text": "Every building permit application shall include the submittals listed for its project type. Incomplete applications are not accepted for review. New construction requires a site plan, floor plans, elevations, stamped structural calculations, energy compliance forms and a boundary survey. Additions require site plan, floor plans, elevations and structural calculations. Accessory dwelling units require site plan, floor plans, elevations and a utility connection plan. Changes of use require floor plans, an occupancy classification letter and a parking plan."},
+    {"id": "UDC 2.7", "title": "Expedited Ministerial Approval", "text": "An application that complies with all objective standards of this code, includes all required submittals and proposes only permitted uses shall be approved ministerially without a public hearing. The Director shall issue a decision within 10 business days of a complete submittal."},
+    {"id": "UDC 2.8", "title": "Conditional Use Permits", "text": "Uses listed as conditional in a district require a Conditional Use Permit approved by the Planning Commission after a public hearing. The applicant shall provide notice to owners within 300 feet."},
+    {"id": "UDC 2.9", "title": "Variances", "text": "Relief from a dimensional standard (height, setback, lot coverage or floor area ratio) requires a variance approved by the Board of Zoning Appeals upon finding a hardship unique to the property."},
+    {"id": "UDC 4.2", "title": "R-1 Single-Family Residential", "text": "Minimum lot area 6,000 sq ft. Maximum height 35 ft and 2.5 stories. Setbacks: front 25 ft, side 7 ft, rear 25 ft. Maximum lot coverage 40 percent. Maximum floor area ratio 0.5. Permitted: single-family dwellings, one accessory dwelling unit, home occupations, accessory structures. Conditional: daycare, places of worship."},
+    {"id": "UDC 4.3", "title": "R-2 Two-Family Residential", "text": "Minimum lot area 5,000 sq ft; one dwelling unit per 2,500 sq ft of lot area. Maximum height 35 ft and 3 stories. Setbacks: front 20 ft, side 5 ft, rear 20 ft. Maximum lot coverage 45 percent. Maximum FAR 0.75. Permitted: single-family, duplex, ADU, home occupations. Conditional: daycare, triplex."},
+    {"id": "UDC 4.4", "title": "R-3 Multifamily Residential", "text": "Minimum lot area 5,000 sq ft; one dwelling unit per 1,000 sq ft of lot area. Maximum height 50 ft and 4 stories. Setbacks: front 15 ft, side 5 ft, rear 15 ft. Maximum lot coverage 60 percent. Maximum FAR 2.0. Permitted: single-family through multifamily, ADU. Conditional: daycare, office."},
+    {"id": "UDC 4.6", "title": "MU Mixed Use Corridor", "text": "Minimum lot area 2,500 sq ft; one dwelling unit per 500 sq ft of lot area. Maximum height 65 ft and 5 stories. No front or side setback required; rear setback 10 ft. Maximum lot coverage 85 percent. Maximum FAR 3.5. Permitted: multifamily, retail, restaurant, office, personal services, daycare. Conditional: bars, light manufacturing, drive-throughs. Off-street parking requirements are reduced 50 percent in MU."},
+    {"id": "UDC 4.7", "title": "C-1 Neighborhood Commercial", "text": "Minimum lot area 3,000 sq ft. Maximum height 40 ft and 3 stories. Setbacks: front 10 ft, side 0 ft, rear 15 ft. Maximum lot coverage 75 percent. Maximum FAR 1.5. Permitted: retail, restaurant, office, personal services, daycare. Conditional: bars, drive-throughs, multifamily."},
+    {"id": "UDC 6.3", "title": "Accessory Dwelling Units", "text": "One ADU is permitted per lot in any residential district. An ADU shall not exceed 800 sq ft or 50 percent of the primary dwelling floor area, whichever is less. Maximum ADU height 20 ft. Minimum side and rear setback for a detached ADU is 5 ft, notwithstanding the district setback. No off-street parking is required for an ADU."},
+    {"id": "UDC 6.5", "title": "Fences", "text": "Fences may not exceed 4 ft in a front yard or 7 ft in side and rear yards. Fences under 7 ft do not require a building permit."},
+    {"id": "UDC 7.1", "title": "Off-Street Parking", "text": "Minimum spaces: single-family 2 per unit; duplex and triplex 1.5 per unit; multifamily 1 per unit; ADU none. Retail 3 per 1,000 sq ft; restaurant 8 per 1,000 sq ft; office 2.5 per 1,000 sq ft; personal services 3 per 1,000 sq ft; bar 10 per 1,000 sq ft. Requirements are reduced 50 percent in the MU district."},
+    {"id": "UDC 9.1", "title": "Business License", "text": "Every business operating in the City shall hold a business license. The license application requires a certificate of occupancy for the premises or a home occupation registration, and confirmation that the use is permitted in the zoning district."}
+  ]
+}

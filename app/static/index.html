@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PermitPilot · Apply</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/">PermitPilot<small>City of Capitol Falls</small></a>
+  <nav><a class="active" href="/">Apply for a permit</a><a href="#ask">Ask City Hall</a><a href="/staff">Staff console</a></nav>
+  <span id="ai-badge" class="ai-badge">AI: …</span>
+</header>
+<main>
+  <section class="hero">
+    <h1>Find out in seconds whether your project can be approved.</h1>
+    <p>Describe what you want to build or open, in your own words. PermitPilot reads it, looks up your parcel,
+      checks it against the city's zoning code and tells you exactly what to fix, before you wait in a queue.</p>
+  </section>
+
+  <div class="grid">
+    <div>
+      <form class="card" id="apply-form">
+        <h2>1. Your project</h2>
+        <label for="address">Property address</label>
+        <input id="address" list="parcel-list" placeholder="e.g. 412 Maple St" required>
+        <datalist id="parcel-list"></datalist>
+        <div class="row">
+          <div style="flex:1"><label for="name">Your name</label><input id="name" placeholder="Jane Resident"></div>
+          <div style="flex:1"><label for="email">Email</label><input id="email" type="email" placeholder="jane@example.com"></div>
+        </div>
+        <label for="description">Describe the project</label>
+        <textarea id="description" placeholder="What are you building or changing? Size, height, distance to property lines, parking, and which drawings you have."></textarea>
+        <div class="chips" id="examples"></div>
+        <div class="row" style="margin-top:14px">
+          <button class="primary" id="check-btn" type="submit">Run instant pre-check</button>
+        </div>
+      </form>
+
+      <div class="card" id="ask">
+        <h2>Ask City Hall</h2>
+        <p class="muted small">Questions about ADUs, setbacks, parking, fences or business licenses. Answers cite the code.</p>
+        <form id="ask-form" class="row">
+          <input id="question" placeholder="How big can a backyard cottage be?" style="flex:1">
+          <button class="primary" id="ask-btn">Ask</button>
+        </form>
+        <div id="answer" class="answer"></div>
+      </div>
+    </div>
+
+    <div id="results">
+      <div class="card empty">Your pre-check results will appear here.</div>
+    </div>
+  </div>
+</main>
+
+<script src="/static/common.js"></script>
+<script>
+const EXAMPLES = [
+  ["Backyard ADU", "412 Maple St", "I want to build a detached ADU in my backyard. It's one story, 650 sq ft, 15 ft tall, 5 ft from the side property line and 10 ft from the rear. I have a site plan, floor plans, elevations and a utility plan."],
+  ["Open a restaurant", "1500 Commerce Blvd", "I want to open a restaurant in a 2,400 sq ft ground floor space. Change of use from vacant shell. We'll have 8 parking spaces. Floor plans and occupancy letter attached."],
+  ["Too-tall addition", "88 Birch Ave", "Adding a second-story addition over the garage, 500 sq ft, making the house 38 ft tall. 6 ft from the side and 22 ft from the rear. Site plan, floor plans, elevations and structural calcs attached."],
+  ["Bar on Main St", "230 Main St", "Convert the existing 1,500 sq ft shop into a small craft beer bar with 15 parking spaces. Floor plans, occupancy letter and parking plan attached."],
+];
+let last = null;
+
+document.getElementById("examples").innerHTML = "Try: " + EXAMPLES.map((e, i) =>
+  `<button type="button" class="chip" data-i="${i}">${esc(e[0])}</button>`).join("");
+document.getElementById("examples").addEventListener("click", (ev) => {
+  const i = ev.target.dataset.i; if (i === undefined) return;
+  document.getElementById("address").value = EXAMPLES[i][1];
+  document.getElementById("description").value = EXAMPLES[i][2];
+});
+
+api("/api/parcels").then((ps) => {
+  document.getElementById("parcel-list").innerHTML = ps.map((p) => `<option value="${esc(p.address)}">${esc(p.district)}</option>`).join("");
+});
+
+function body(params) {
+  return {
+    address: document.getElementById("address").value,
+    applicant_name: document.getElementById("name").value || "Applicant",
+    applicant_email: document.getElementById("email").value,
+    description: document.getElementById("description").value,
+    params: params || null,
+  };
+}
+
+function showResults(r) {
+  last = r;
+  const src = { claude: "Claude read your description", heuristic: "Read by the offline parser", applicant: "As you edited them" }[r.extraction_source];
+  document.getElementById("results").innerHTML = `
+    <div class="card"><h2>2. Pre-check result</h2>${renderReview(r.review)}</div>
+    <div class="card"><h2>3. What we understood <span class="muted small">· ${src}. Fix anything we got wrong.</span></h2>
+      <div id="params"></div>
+      <div class="row" style="margin-top:12px">
+        <button id="recheck-btn">Re-check with my edits</button>
+        <button class="primary" id="submit-btn">Submit application</button>
+      </div></div>
+    <div class="card"><h2>Your parcel <span class="muted small">· ${esc(r.parcel.address)}</span></h2>${renderParcel(r.parcel)}</div>`;
+  renderParamsForm(document.getElementById("params"), r.params);
+  const paramsEl = document.getElementById("params");
+  document.getElementById("recheck-btn").onclick = (e) => busy(e.target, async () =>
+    showResults(await api("/api/precheck", { method: "POST", body: body(readParamsForm(paramsEl)) })));
+  document.getElementById("submit-btn").onclick = (e) => busy(e.target, async () => {
+    const a = await api("/api/applications", { method: "POST", body: body(readParamsForm(paramsEl)) });
+    document.getElementById("results").insertAdjacentHTML("afterbegin",
+      `<div class="card"><h2>Submitted: application #${a.id}</h2><p class="small">It's in the city's review queue now.
+       Because the pre-check already ran, a reviewer can act on it right away. <a href="/staff#${a.id}">Open in staff console →</a></p></div>`);
+    e.target.disabled = true;
+  });
+}
+
+document.getElementById("apply-form").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  busy(document.getElementById("check-btn"), async () => showResults(await api("/api/precheck", { method: "POST", body: body() })));
+});
+
+document.getElementById("ask-form").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  busy(document.getElementById("ask-btn"), async () => {
+    const r = await api("/api/ask", { method: "POST", body: { question: document.getElementById("question").value } });
+    document.getElementById("answer").innerHTML = esc(r.answer) +
+      (r.citations.length ? `<div class="muted small" style="margin-top:6px">Sources: ${r.citations.map(esc).join(", ")}</div>` : "");
+  });
+});
+loadStatusBadge();
+</script>
+</body>
+</html>

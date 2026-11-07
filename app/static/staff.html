@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PermitPilot · Staff</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/">PermitPilot<small>Plan Review</small></a>
+  <nav><a href="/">Resident portal</a><a class="active" href="/staff">Review queue</a><a href="#impact">Impact</a></nav>
+  <span id="ai-badge" class="ai-badge">AI: …</span>
+</header>
+<main>
+  <div class="tiles" id="tiles"></div>
+  <div class="grid">
+    <div class="card">
+      <h2>Review queue</h2>
+      <table>
+        <thead><tr><th>#</th><th>Address</th><th>Type</th><th>Status</th><th>Age</th></tr></thead>
+        <tbody id="queue"></tbody>
+      </table>
+    </div>
+    <div id="detail"><div class="card empty">Select an application to review it.</div></div>
+  </div>
+
+  <div class="card" id="impact" style="margin-top:20px">
+    <h2>Revenue impact of faster permits</h2>
+    <p class="muted small">Every month a project waits for a permit is a month it isn't paying property tax, and some projects never get built.
+      Estimate what faster approvals are worth to your city's budget.</p>
+    <div class="calc">
+      <div><label>Building permits per year</label><input id="c-permits" type="number" value="2500"></div>
+      <div><label>Avg. new value per permit ($)</label><input id="c-value" type="number" value="350000"></div>
+      <div><label>Property tax rate (%)</label><input id="c-rate" type="number" step="0.05" value="1.1"></div>
+      <div><label>Current approval time (months)</label><input id="c-now" type="number" step="0.5" value="6"></div>
+      <div><label>Time with AI review (% of current)</label><input id="c-pct" type="number" value="10"></div>
+    </div>
+    <div class="calc-out" id="c-out"></div>
+    <p class="muted small" id="c-explain"></p>
+  </div>
+</main>
+
+<script src="/static/common.js"></script>
+<script>
+const STATUS = {
+  ready_to_approve: "Ready to approve", needs_corrections: "Needs corrections", needs_info: "Needs info",
+  needs_hearing: "Needs hearing", approved: "Approved", corrections_sent: "Corrections sent", hearing_scheduled: "Hearing scheduled",
+};
+let apps = [], selected = null;
+const ageDays = (iso) => Math.max(0, Math.floor((Date.now() - new Date(iso)) / 864e5));
+
+async function refresh() {
+  const [list, m] = await Promise.all([api("/api/applications"), api("/api/metrics")]);
+  apps = list;
+  document.getElementById("tiles").innerHTML = [
+    [m.open, "Open applications"],
+    [`${m.auto_cleared_pct}%`, "Cleared by pre-check at intake"],
+    [m.avg_days_to_decision ?? "—", "Avg. days to decision"],
+    [`${m.oldest_open_days}d`, "Oldest open item"],
+    [m.staff_hours_saved, "Reviewer hours saved (est.)"],
+  ].map(([v, l]) => `<div class="tile"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+  const open = (a) => !a.decided_at;
+  document.getElementById("queue").innerHTML = apps
+    .slice().sort((a, b) => (open(b) - open(a)) || (a.created_at < b.created_at ? -1 : 1))
+    .map((a) => `<tr data-id="${a.id}" class="${a.id === selected ? "sel" : ""}"><td>${a.id}</td><td>${esc(a.address)}<div class="muted small">${esc(a.applicant_name)}</div></td>
+      <td class="small">${pretty(a.params.project_type || "—")}</td><td><span class="status ${a.status}">${STATUS[a.status]}</span></td>
+      <td class="small">${ageDays(a.created_at)}d</td></tr>`).join("");
+}
+
+document.getElementById("queue").addEventListener("click", (ev) => {
+  const tr = ev.target.closest("tr"); if (tr) select(+tr.dataset.id);
+});
+
+async function select(id) {
+  selected = id; location.hash = id;
+  const a = await api(`/api/applications/${id}`);
+  await refresh();
+  const decided = !!a.decided_at;
+  const canApprove = a.review.outcome === "approvable";
+  const src = { claude: "extracted by Claude", heuristic: "extracted by offline parser", applicant: "entered by applicant" }[a.extraction_source] || "";
+  document.getElementById("detail").innerHTML = `
+    <div class="card"><h2>#${a.id} · ${esc(a.address)} <span class="muted small">· ${esc(a.applicant_name)} · <span class="status ${a.status}">${STATUS[a.status]}</span></span></h2>
+      <p class="small">${esc(a.description) || "<span class='muted'>No description.</span>"}</p>
+      ${renderParcel(a.parcel)}</div>
+    <div class="card"><h2>Automated review</h2>${renderReview(a.review)}</div>
+    <div class="card"><h2>Project data <span class="muted small">· ${src}. Correct anything and re-run.</span></h2>
+      <div id="params"></div><div class="row" style="margin-top:12px"><button id="rerun">Save & re-run review</button></div></div>
+    <div class="card"><h2>Letter to applicant ${a.letter_source ? `<span class="muted small">· ${esc(a.letter_source)}</span>` : ""}</h2>
+      <textarea id="letter" style="min-height:240px" placeholder="Draft a letter from the findings…">${esc(a.letter || "")}</textarea>
+      <div class="row" style="margin-top:10px"><button id="draft">Draft with AI</button><button id="save-letter">Save edits</button></div></div>
+    <div class="card"><h2>Decision</h2>
+      ${decided ? `<p class="small">Decided ${new Date(a.decided_at).toLocaleDateString()}.</p>` : `
+      <div class="row">
+        <button class="primary" id="approve" ${canApprove ? "" : "disabled title='Open findings remain'"}>Approve permit</button>
+        <button id="corrections">Send corrections</button>
+        <button id="hearing" ${a.review.outcome === "hearing_required" ? "" : "disabled"}>Schedule hearing</button>
+      </div>`}
+      <h2 style="margin-top:16px">History</h2>
+      <ul class="history">${a.history.map((h) => `<li>${new Date(h.at).toLocaleString()} · ${esc(h.event)}</li>`).join("")}</ul></div>`;
+  const paramsEl = document.getElementById("params");
+  renderParamsForm(paramsEl, a.params);
+  const on = (idEl, fn) => { const b = document.getElementById(idEl); if (b) b.onclick = (e) => busy(e.target, fn); };
+  on("rerun", async () => { await api(`/api/applications/${id}/params`, { method: "PUT", body: readParamsForm(paramsEl) }); toast("Re-reviewed"); select(id); });
+  on("draft", async () => { await api(`/api/applications/${id}/letter`, { method: "POST" }); select(id); });
+  on("save-letter", async () => { await api(`/api/applications/${id}/letter`, { method: "PUT", body: { letter: document.getElementById("letter").value } }); toast("Saved"); select(id); });
+  const decide = (action) => async () => { await api(`/api/applications/${id}/decision`, { method: "POST", body: { action } }); toast("Decision recorded"); select(id); };
+  on("approve", decide("approve"));
+  on("corrections", async () => {
+    if (!document.getElementById("letter").value.trim()) await api(`/api/applications/${id}/letter`, { method: "POST" });
+    else await api(`/api/applications/${id}/letter`, { method: "PUT", body: { letter: document.getElementById("letter").value } });
+    await decide("send_corrections")();
+  });
+  on("hearing", decide("schedule_hearing"));
+}
+
+// Revenue model: a permit approved sooner starts paying property tax sooner.
+// Annual gain ≈ permits × value × tax rate × (months saved / 12).
+function calc() {
+  const v = (id) => parseFloat(document.getElementById(id).value) || 0;
+  const saved = v("c-now") * (1 - v("c-pct") / 100);
+  const gain = v("c-permits") * v("c-value") * (v("c-rate") / 100) * (saved / 12);
+  document.getElementById("c-out").textContent = `≈ $${Math.round(gain).toLocaleString()} more tax revenue per year`;
+  document.getElementById("c-explain").textContent =
+    `${v("c-permits").toLocaleString()} permits × $${v("c-value").toLocaleString()} × ${v("c-rate")}% tax × ${saved.toFixed(1)} months sooner ÷ 12. ` +
+    `Conservative: ignores projects that are never built because of delay.`;
+}
+document.querySelectorAll(".calc input").forEach((i) => i.addEventListener("input", calc));
+calc();
+
+loadStatusBadge();
+refresh().then(() => { const h = parseInt(location.hash.slice(1), 10); if (h) select(h); });
+</script>
+</body>
+</html>

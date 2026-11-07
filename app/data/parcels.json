@@ -1,0 +1,11 @@
+{
+  "_note": "Stand-in for a city GIS parcel layer. Fictional addresses.",
+  "parcels": [
+    {"parcel_id": "014-220-07", "address": "412 Maple St", "district": "R-1", "lot_area_sqft": 7200, "lot_width_ft": 60, "existing_footprint_sqft": 1650, "existing_floor_area_sqft": 2100, "existing_units": 1},
+    {"parcel_id": "014-221-12", "address": "88 Birch Ave", "district": "R-2", "lot_area_sqft": 5500, "lot_width_ft": 50, "existing_footprint_sqft": 1200, "existing_floor_area_sqft": 1400, "existing_units": 1},
+    {"parcel_id": "022-104-03", "address": "1500 Commerce Blvd", "district": "MU", "lot_area_sqft": 12000, "lot_width_ft": 100, "existing_footprint_sqft": 0, "existing_floor_area_sqft": 0, "existing_units": 0},
+    {"parcel_id": "022-118-21", "address": "230 Main St", "district": "C-1", "lot_area_sqft": 4000, "lot_width_ft": 40, "existing_footprint_sqft": 2800, "existing_floor_area_sqft": 2800, "existing_units": 0},
+    {"parcel_id": "031-009-15", "address": "77 Riverside Dr", "district": "R-3", "lot_area_sqft": 9000, "lot_width_ft": 75, "existing_footprint_sqft": 0, "existing_floor_area_sqft": 0, "existing_units": 0},
+    {"parcel_id": "014-230-02", "address": "19 Oak Ct", "district": "R-1", "lot_area_sqft": 6000, "lot_width_ft": 50, "existing_footprint_sqft": 2100, "existing_floor_area_sqft": 2600, "existing_units": 1}
+  ]
+}
