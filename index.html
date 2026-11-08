@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CityBridge — The Common App for Small Business</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50:'#eff6ff', 100:'#dbeafe', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8', 800:'#1e40af', 900:'#1e3a8a' },
+            gold: { 400:'#fbbf24', 500:'#f59e0b', 600:'#d97706' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    * { font-family: 'Inter', sans-serif; }
+    .gradient-hero { background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%); }
+    .bridge-line { background: linear-gradient(90deg, #2563eb, #f59e0b, #2563eb); height: 3px; }
+    .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+    .fade-in { animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .status-dot { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.5;} }
+  </style>
+</head>
+<body class="bg-white text-slate-900">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur border-b border-slate-100 shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-brand-700 rounded-lg flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        </div>
+        <span class="font-bold text-xl text-slate-900">CityBridge</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+        <a href="#features" class="hover:text-brand-600 transition-colors">Features</a>
+        <a href="#how-it-works" class="hover:text-brand-600 transition-colors">How It Works</a>
+        <a href="inspections.html" class="hover:text-brand-600 transition-colors">Inspections</a>
+        <a href="government.html" class="hover:text-brand-600 transition-colors">For Cities</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="dashboard.html" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Log in</a>
+        <a href="dashboard.html" class="bg-brand-600 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-brand-700 transition-colors">Try the demo →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="gradient-hero pt-32 pb-24 px-6 text-white">
+    <div class="max-w-4xl mx-auto text-center fade-in">
+      <div class="inline-flex items-center gap-2 bg-white/15 border border-white/20 rounded-full px-4 py-1.5 text-sm font-medium mb-8">
+        <span class="w-2 h-2 bg-gold-400 rounded-full status-dot"></span>
+        Built for Sacramento small businesses
+      </div>
+      <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
+        One profile.<br/>Every permit.<br/><span class="text-gold-400">Both directions.</span>
+      </h1>
+      <p class="text-xl text-blue-100 max-w-2xl mx-auto mb-10 leading-relaxed">
+        Right now, small businesses and government talk through scattered websites, mailed notices, and long lines. CityBridge is the bridge: one place where owners file, renew, get inspected, and find money they qualify for.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="dashboard.html" class="bg-white text-brand-700 font-bold px-8 py-3.5 rounded-xl hover:bg-blue-50 transition-colors shadow-lg">
+          See the owner dashboard →
+        </a>
+        <a href="government.html" class="border border-white/40 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-white/10 transition-colors">
+          See the city dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="max-w-3xl mx-auto mt-20 grid grid-cols-3 gap-6">
+      <div class="text-center">
+        <div class="text-4xl font-black text-gold-400">40%</div>
+        <div class="text-blue-200 text-sm mt-1">of café owners drop off at the health permit step</div>
+      </div>
+      <div class="text-center">
+        <div class="text-4xl font-black text-gold-400">$18K+</div>
+        <div class="text-blue-200 text-sm mt-1">avg penalties from missed renewals and lapses</div>
+      </div>
+      <div class="text-center">
+        <div class="text-4xl font-black text-gold-400">1 app</div>
+        <div class="text-blue-200 text-sm mt-1">replaces 12+ city, county & state portals</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bridge Visual -->
+  <section id="how-it-works" class="py-20 px-6 bg-slate-50">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-slate-900 mb-4">The two-way bridge</h2>
+        <p class="text-slate-500 max-w-xl mx-auto">Information flows both ways. Businesses reach government, and government reaches businesses — all in one place.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 items-center">
+        <!-- Business side -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+          <div class="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          </div>
+          <h3 class="font-bold text-lg mb-3 text-slate-900">Business → City</h3>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> File permits & renewals</li>
+            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Schedule inspections</li>
+            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Pay taxes & fees</li>
+            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Respond to violations</li>
+            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Give feedback on processes</li>
+          </ul>
+        </div>
+
+        <!-- Bridge -->
+        <div class="text-center">
+          <div class="bridge-line mb-6 rounded-full"></div>
+          <div class="w-16 h-16 bg-gold-500 rounded-full flex items-center justify-center mx-auto shadow-lg">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          </div>
+          <div class="bridge-line mt-6 rounded-full"></div>
+          <p class="text-sm font-semibold text-slate-700 mt-4">One profile.<br/>Every program.</p>
+        </div>
+
+        <!-- Government side -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+          <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+          </div>
+          <h3 class="font-bold text-lg mb-3 text-slate-900">City → Business</h3>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li class="flex items-center gap-2"><span class="text-amber-500">●</span> Grants, loans & rebates</li>
+            <li class="flex items-center gap-2"><span class="text-amber-500">●</span> Law & fee changes</li>
+            <li class="flex items-center gap-2"><span class="text-amber-500">●</span> City contracts to bid on</li>
+            <li class="flex items-center gap-2"><span class="text-amber-500">●</span> Emergency & disaster info</li>
+            <li class="flex items-center gap-2"><span class="text-amber-500">●</span> Road closures near your shop</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-20 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-slate-900 mb-4">Everything in one place</h2>
+        <p class="text-slate-500 max-w-xl mx-auto">Built around how Sacramento's permit, inspection, and business systems actually work.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <a href="dashboard.html#checklist" class="card-hover bg-white border border-slate-200 rounded-2xl p-6 block">
+          <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          </div>
+          <div class="text-xs font-semibold text-brand-600 uppercase tracking-wide mb-1">Priority 1</div>
+          <h3 class="font-bold text-slate-900 mb-2">Renewal calendar</h3>
+          <p class="text-sm text-slate-500">Personal checklist of every license, permit and renewal due date — with reminders before the deadline, not after.</p>
+        </a>
+
+        <a href="dashboard.html#status" class="card-hover bg-white border border-slate-200 rounded-2xl p-6 block">
+          <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div class="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Priority 2</div>
+          <h3 class="font-bold text-slate-900 mb-2">Application status tracking</h3>
+          <p class="text-sm text-slate-500">Submitted → Received → Under Review → Needs Info → Approved. No more wondering if anyone on the other end is looking.</p>
+        </a>
+
+        <a href="dashboard.html#alerts" class="card-hover bg-white border border-slate-200 rounded-2xl p-6 block">
+          <div class="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          </div>
+          <div class="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-1">Priority 3</div>
+          <h3 class="font-bold text-slate-900 mb-2">Tailored alerts</h3>
+          <p class="text-sm text-slate-500">New rules for cafés, minimum wage changes, SMUD energy rebates, SBA loans — sent only to businesses they actually apply to.</p>
+        </a>
+
+        <a href="dashboard.html#vault" class="card-hover bg-white border border-slate-200 rounded-2xl p-6 block">
+          <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
+          </div>
+          <div class="text-xs font-semibold text-purple-600 uppercase tracking-wide mb-1">Priority 4</div>
+          <h3 class="font-bold text-slate-900 mb-2">Document vault</h3>
+          <p class="text-sm text-slate-500">Every permit, license, and inspection result in one place. Share a verified compliance summary with landlords, lenders, or grant programs.</p>
+        </a>
+
+        <a href="inspections.html" class="card-hover bg-white border border-slate-200 rounded-2xl p-6 block">
+          <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-2">Inspections</h3>
+          <p class="text-sm text-slate-500">Schedule health, fire, and building inspections. Get a checklist before the inspector arrives. See results as a plain-language action plan.</p>
+        </a>
+
+        <a href="government.html" class="card-hover bg-white border border-slate-200 rounded-2xl p-6 block">
+          <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          </div>
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Priority 5</div>
+          <h3 class="font-bold text-slate-900 mb-2">City analytics dashboard</h3>
+          <p class="text-sm text-slate-500">Where businesses get stuck, common mistakes, targeted outreach. Anonymized data that shows government where to improve — and why to pay for this.</p>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo Callout — Yellow Placard -->
+  <section class="py-20 px-6 bg-amber-50 border-y border-amber-100">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold text-slate-900 mb-3">The 10-second demo</h2>
+        <p class="text-slate-500">A real Sacramento County health inspection result becomes an owner's action plan.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <!-- Before: raw report -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+          <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Sacramento County — Official Report</div>
+          <div class="font-mono text-xs text-slate-600 leading-relaxed">
+            <p>INSPECTION DATE: 10/28/2026</p>
+            <p>FACILITY: La Tiendita Café</p>
+            <p class="mt-2 text-yellow-700 font-bold">RESULT: CONDITIONAL PASS (YELLOW)</p>
+            <p class="mt-3">VIOLATION 001: Plumbing fixtures in food prep area blocked by storage equipment. Ref: Cal Code Reg T14 §113953(a)</p>
+            <p class="mt-2">VIOLATION 002: Ambient temp in walk-in refrigeration unit observed at 45°F. Required: ≤41°F. Ref: §114002</p>
+            <p class="mt-2">VIOLATION 003: Food handler card unavailable for 2 of 3 employees present. Ref: §113948</p>
+          </div>
+        </div>
+        <!-- After: CityBridge action plan -->
+        <div class="bg-white rounded-2xl p-6 border-2 border-amber-400 shadow-lg">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-2xl">🟡</span>
+            <div>
+              <div class="font-bold text-slate-900">Conditional Pass — 3 things to fix</div>
+              <div class="text-xs text-slate-500">Re-inspection scheduled within 2 weeks</div>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="flex gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
+              <span class="text-red-500 font-bold text-sm mt-0.5">1</span>
+              <div>
+                <div class="font-semibold text-sm text-slate-800">Hand sink is blocked</div>
+                <div class="text-xs text-slate-500 mt-0.5">Move storage equipment away from the prep area sink</div>
+                <div class="text-xs font-semibold text-red-600 mt-1">Fix today</div>
+              </div>
+            </div>
+            <div class="flex gap-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
+              <span class="text-orange-500 font-bold text-sm mt-0.5">2</span>
+              <div>
+                <div class="font-semibold text-sm text-slate-800">Walk-in fridge too warm (45°F)</div>
+                <div class="text-xs text-slate-500 mt-0.5">Must be 41°F or below — call your refrigeration tech</div>
+                <div class="text-xs font-semibold text-orange-600 mt-1">Fix within 24 hours</div>
+              </div>
+            </div>
+            <div class="flex gap-3 p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+              <span class="text-yellow-600 font-bold text-sm mt-0.5">3</span>
+              <div>
+                <div class="font-semibold text-sm text-slate-800">Missing food handler cards (2 employees)</div>
+                <div class="text-xs text-slate-500 mt-0.5">Each employee must have a valid card on hand</div>
+                <div class="text-xs font-semibold text-yellow-700 mt-1">Upload by Friday</div>
+              </div>
+            </div>
+          </div>
+          <a href="inspections.html" class="mt-4 w-full block text-center bg-brand-600 text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-brand-700 transition-colors">
+            See full inspection feature →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Money from government -->
+  <section class="py-20 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="text-xs font-bold text-brand-600 uppercase tracking-widest mb-3">Government → Business</div>
+          <h2 class="text-3xl font-bold text-slate-900 mb-4">Money you didn't know about</h2>
+          <p class="text-slate-500 mb-6">Most owners miss grants and rebates not because they don't qualify — but because they never heard about them. CityBridge matches your profile to every open program.</p>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-green-600 text-xs font-bold">$</span></span>
+              <span class="text-slate-700"><strong>Grants</strong> — state, city and county programs filtered to your business type</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-blue-600 text-xs font-bold">$</span></span>
+              <span class="text-slate-700"><strong>Loans</strong> — SBA and state loan guarantees you're pre-screened for</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-amber-600 text-xs font-bold">↩</span></span>
+              <span class="text-slate-700"><strong>Rebates</strong> — SMUD energy rebates, Sacramento County COVID fee waivers</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-purple-600 text-xs font-bold">%</span></span>
+              <span class="text-slate-700"><strong>Tax credits</strong> — hiring credits, retirement plan credits, local incentive zones</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-red-600 text-xs font-bold">!</span></span>
+              <span class="text-slate-700"><strong>Amnesty programs</strong> — some cities forgive up to 90% of penalties for voluntary registration</span>
+            </li>
+          </ul>
+        </div>
+        <div class="bg-slate-900 rounded-2xl p-6 text-white">
+          <div class="text-sm text-slate-400 mb-4 font-medium">Matched programs for La Tiendita Café</div>
+          <div class="space-y-3">
+            <div class="bg-white/10 rounded-xl p-4">
+              <div class="flex justify-between items-start mb-1">
+                <div class="font-semibold text-sm">SMUD Small Business Energy Program</div>
+                <span class="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">Open</span>
+              </div>
+              <div class="text-slate-400 text-xs">Up to $5,000 in energy efficiency rebates for food service equipment</div>
+              <div class="text-green-400 text-xs font-semibold mt-1.5">Deadline: Dec 31, 2026</div>
+            </div>
+            <div class="bg-white/10 rounded-xl p-4">
+              <div class="flex justify-between items-start mb-1">
+                <div class="font-semibold text-sm">SBA Community Advantage Loan</div>
+                <span class="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">Open</span>
+              </div>
+              <div class="text-slate-400 text-xs">Up to $350K, low-interest, for businesses in underserved communities</div>
+              <div class="text-green-400 text-xs font-semibold mt-1.5">Rolling deadline</div>
+            </div>
+            <div class="bg-white/10 rounded-xl p-4">
+              <div class="flex justify-between items-start mb-1">
+                <div class="font-semibold text-sm">Sacramento HIRE Tax Credit</div>
+                <span class="bg-yellow-500 text-white text-xs px-2 py-0.5 rounded-full">Closing soon</span>
+              </div>
+              <div class="text-slate-400 text-xs">$3,000 credit per new hire from targeted zip codes</div>
+              <div class="text-yellow-400 text-xs font-semibold mt-1.5">Deadline: Nov 30, 2026</div>
+            </div>
+          </div>
+          <a href="dashboard.html#alerts" class="mt-4 w-full block text-center bg-brand-600 text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-brand-700 transition-colors">
+            See all matched programs
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="gradient-hero py-20 px-6 text-white text-center">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-4xl font-extrabold mb-4">Ready to try CityBridge?</h2>
+      <p class="text-blue-100 text-lg mb-8">See what a Sacramento café owner's dashboard looks like — or explore the city analytics view.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="dashboard.html" class="bg-white text-brand-700 font-bold px-8 py-3.5 rounded-xl hover:bg-blue-50 transition-colors shadow-lg">
+          Owner dashboard →
+        </a>
+        <a href="government.html" class="border border-white/40 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-white/10 transition-colors">
+          City analytics →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-10 px-6 text-center text-sm">
+    <div class="flex items-center justify-center gap-2 mb-3">
+      <div class="w-6 h-6 bg-brand-700 rounded-md flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"/></svg>
+      </div>
+      <span class="text-white font-semibold">CityBridge</span>
+    </div>
+    <p>Built for Sacramento small businesses · <a href="government.html" class="text-brand-400 hover:underline">For cities</a> · <a href="dashboard.html" class="text-brand-400 hover:underline">Demo</a></p>
+  </footer>
+
+</body>
+</html>

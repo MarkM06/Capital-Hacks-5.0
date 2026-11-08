@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CityBridge — City Analytics Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50:'#eff6ff', 100:'#dbeafe', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8', 800:'#1e40af', 900:'#1e3a8a' },
+            gold: { 400:'#fbbf24', 500:'#f59e0b', 600:'#d97706' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    * { font-family: 'Inter', sans-serif; }
+    .bar { transition: width 1s ease-out; }
+  </style>
+</head>
+<body class="bg-slate-900 min-h-screen text-white">
+
+  <!-- Nav -->
+  <nav class="bg-slate-800 border-b border-slate-700 px-6 h-14 flex items-center justify-between fixed top-0 w-full z-50">
+    <div class="flex items-center gap-4">
+      <a href="index.html" class="flex items-center gap-2">
+        <div class="w-7 h-7 bg-brand-600 rounded-md flex items-center justify-center">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"/></svg>
+        </div>
+        <span class="font-bold text-white">CityBridge</span>
+      </a>
+      <span class="text-slate-500">/</span>
+      <span class="text-sm font-semibold text-slate-300">City of Sacramento — Analytics</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-xs text-slate-400">All data anonymized · Individual records require owner consent</span>
+      <a href="dashboard.html" class="text-sm font-semibold text-brand-400 hover:underline">Owner view →</a>
+    </div>
+  </nav>
+
+  <div class="pt-14">
+    <div class="max-w-6xl mx-auto px-6 py-8">
+
+      <div class="flex items-start justify-between mb-8">
+        <div>
+          <div class="text-xs font-bold text-brand-400 uppercase tracking-widest mb-2">Government Dashboard</div>
+          <h1 class="text-3xl font-black text-white">Where businesses get stuck</h1>
+          <p class="text-slate-400 mt-2">Anonymized, aggregated data across all Sacramento businesses on CityBridge. Updated daily.</p>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2">
+          <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span class="text-sm text-slate-300 font-medium">Live · Nov 6, 2026</span>
+        </div>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
+          <div class="text-3xl font-black text-white">2,847</div>
+          <div class="text-slate-400 text-sm mt-1">Businesses on platform</div>
+          <div class="text-green-400 text-xs font-semibold mt-2">↑ 12% this month</div>
+        </div>
+        <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
+          <div class="text-3xl font-black text-amber-400">40%</div>
+          <div class="text-slate-400 text-sm mt-1">Drop-off at health permit step</div>
+          <div class="text-amber-400 text-xs font-semibold mt-2">Top friction point</div>
+        </div>
+        <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
+          <div class="text-3xl font-black text-brand-400">$1.2M</div>
+          <div class="text-slate-400 text-sm mt-1">In grants facilitated</div>
+          <div class="text-green-400 text-xs font-semibold mt-2">↑ From $0 previously</div>
+        </div>
+        <div class="bg-slate-800 rounded-xl p-5 border border-slate-700">
+          <div class="text-3xl font-black text-green-400">68%</div>
+          <div class="text-slate-400 text-sm mt-1">Renewal on-time rate</div>
+          <div class="text-green-400 text-xs font-semibold mt-2">↑ from 41% (prior year)</div>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+
+        <!-- Drop-off funnel -->
+        <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+          <h2 class="font-bold text-white mb-1">Permit application funnel — Cafés & Restaurants</h2>
+          <p class="text-xs text-slate-400 mb-5">Where applicants stop. 100% = all who started an application this year.</p>
+          <div class="space-y-4 text-sm">
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-slate-300">Started application</span>
+                <span class="font-bold text-white">100%</span>
+              </div>
+              <div class="bg-slate-700 rounded-full h-3">
+                <div class="bar bg-brand-500 h-3 rounded-full" style="width:100%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-slate-300">Completed business info</span>
+                <span class="font-bold text-white">82%</span>
+              </div>
+              <div class="bg-slate-700 rounded-full h-3">
+                <div class="bar bg-brand-500 h-3 rounded-full" style="width:82%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-slate-300 font-semibold">Reached health permit step</span>
+                <span class="font-bold text-amber-400">60%</span>
+              </div>
+              <div class="bg-slate-700 rounded-full h-3">
+                <div class="bar bg-amber-500 h-3 rounded-full" style="width:60%"></div>
+              </div>
+              <div class="text-xs text-amber-400 mt-1 font-semibold">← 40% drop-off here · largest friction point</div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-slate-300">Submitted health permit docs</span>
+                <span class="font-bold text-white">48%</span>
+              </div>
+              <div class="bg-slate-700 rounded-full h-3">
+                <div class="bar bg-brand-400 h-3 rounded-full" style="width:48%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-slate-300">Fire permit completed</span>
+                <span class="font-bold text-white">39%</span>
+              </div>
+              <div class="bg-slate-700 rounded-full h-3">
+                <div class="bar bg-brand-400 h-3 rounded-full" style="width:39%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1">
+                <span class="text-slate-300">Fully licensed &amp; open</span>
+                <span class="font-bold text-green-400">31%</span>
+              </div>
+              <div class="bg-slate-700 rounded-full h-3">
+                <div class="bar bg-green-500 h-3 rounded-full" style="width:31%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 bg-amber-900/30 rounded-xl p-3 text-xs text-amber-300 border border-amber-700/40">
+            <strong>Action:</strong> Send a plain-language "how to get your health permit" guide to businesses currently stuck at this step. One message, one click, targeted to exactly these applicants.
+          </div>
+        </div>
+
+        <!-- Common mistakes -->
+        <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+          <h2 class="font-bold text-white mb-1">Top reasons applications get sent back</h2>
+          <p class="text-xs text-slate-400 mb-5">Most common "Needs More Info" flags across all permit types, last 90 days.</p>
+          <div class="space-y-4 text-sm">
+            <div class="flex items-center gap-4">
+              <div class="w-8 h-8 bg-red-900/60 rounded-lg flex items-center justify-center flex-shrink-0 text-red-400 font-black text-sm">#1</div>
+              <div class="flex-1">
+                <div class="text-white font-semibold">Missing floor plans</div>
+                <div class="text-slate-400 text-xs mt-0.5">34% of rejected applications — required for health and building permits</div>
+              </div>
+              <div class="text-red-400 font-bold text-sm">34%</div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-8 h-8 bg-orange-900/60 rounded-lg flex items-center justify-center flex-shrink-0 text-orange-400 font-black text-sm">#2</div>
+              <div class="flex-1">
+                <div class="text-white font-semibold">Wrong business entity type listed</div>
+                <div class="text-slate-400 text-xs mt-0.5">21% — LLC vs. DBA confusion is the most common version</div>
+              </div>
+              <div class="text-orange-400 font-bold text-sm">21%</div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-8 h-8 bg-yellow-900/60 rounded-lg flex items-center justify-center flex-shrink-0 text-yellow-400 font-black text-sm">#3</div>
+              <div class="flex-1">
+                <div class="text-white font-semibold">Outdated food handler cards</div>
+                <div class="text-slate-400 text-xs mt-0.5">18% — most are just 2–6 months expired</div>
+              </div>
+              <div class="text-yellow-400 font-bold text-sm">18%</div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-8 h-8 bg-blue-900/60 rounded-lg flex items-center justify-center flex-shrink-0 text-blue-400 font-black text-sm">#4</div>
+              <div class="flex-1">
+                <div class="text-white font-semibold">Missing workers' comp certificate</div>
+                <div class="text-slate-400 text-xs mt-0.5">14% — especially among businesses with 1–2 employees</div>
+              </div>
+              <div class="text-blue-400 font-bold text-sm">14%</div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center flex-shrink-0 text-slate-400 font-black text-sm">#5</div>
+              <div class="flex-1">
+                <div class="text-white font-semibold">Address mismatch across forms</div>
+                <div class="text-slate-400 text-xs mt-0.5">9% — building suite vs. official address format differs</div>
+              </div>
+              <div class="text-slate-400 font-bold text-sm">9%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+
+        <!-- Targeted outreach -->
+        <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+          <h2 class="font-bold text-white mb-1">Targeted outreach</h2>
+          <p class="text-xs text-slate-400 mb-5">Send a message only to businesses it applies to. No spray-and-pray.</p>
+          <div class="space-y-3">
+            <div class="bg-slate-700/60 rounded-xl p-4 border border-slate-600">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="text-white font-semibold text-sm">New minimum wage rule — Jan 1</div>
+                  <div class="text-slate-400 text-xs mt-0.5">Audience: 1,204 businesses with employees (all types)</div>
+                </div>
+                <button class="bg-brand-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-brand-700 whitespace-nowrap">Send</button>
+              </div>
+            </div>
+            <div class="bg-slate-700/60 rounded-xl p-4 border border-slate-600">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="text-white font-semibold text-sm">Health permit drop-off follow-up</div>
+                  <div class="text-slate-400 text-xs mt-0.5">Audience: 342 businesses stuck at health permit step (last 60 days)</div>
+                </div>
+                <button class="bg-amber-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-amber-600 whitespace-nowrap">Send</button>
+              </div>
+            </div>
+            <div class="bg-slate-700/60 rounded-xl p-4 border border-slate-600">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="text-white font-semibold text-sm">SMUD rebate — food service businesses</div>
+                  <div class="text-slate-400 text-xs mt-0.5">Audience: 487 restaurants and cafés — SMUD territory</div>
+                </div>
+                <button class="bg-green-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-green-700 whitespace-nowrap">Send</button>
+              </div>
+            </div>
+            <div class="bg-slate-700/60 rounded-xl p-4 border border-slate-600">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="text-white font-semibold text-sm">Gentle nudge — possibly unregistered</div>
+                  <div class="text-slate-400 text-xs mt-0.5">Audience: 89 businesses with no city tax record in 18 months</div>
+                </div>
+                <button class="bg-slate-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-slate-500 whitespace-nowrap">Review</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Program uptake -->
+        <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+          <h2 class="font-bold text-white mb-1">Program uptake</h2>
+          <p class="text-xs text-slate-400 mb-5">Who saw, started, and finished each program after a CityBridge notification.</p>
+          <div class="space-y-5 text-sm">
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-white font-semibold">SMUD Energy Rebate</span>
+                <span class="text-green-400 text-xs font-bold">$218K facilitated</span>
+              </div>
+              <div class="space-y-1">
+                <div class="flex items-center gap-3">
+                  <div class="text-slate-400 text-xs w-16">Saw</div>
+                  <div class="flex-1 bg-slate-700 rounded-full h-2">
+                    <div class="bg-slate-400 h-2 rounded-full bar" style="width:100%"></div>
+                  </div>
+                  <div class="text-slate-400 text-xs w-8 text-right">487</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="text-slate-400 text-xs w-16">Started</div>
+                  <div class="flex-1 bg-slate-700 rounded-full h-2">
+                    <div class="bg-blue-400 h-2 rounded-full bar" style="width:54%"></div>
+                  </div>
+                  <div class="text-slate-400 text-xs w-8 text-right">264</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="text-slate-400 text-xs w-16">Finished</div>
+                  <div class="flex-1 bg-slate-700 rounded-full h-2">
+                    <div class="bg-green-400 h-2 rounded-full bar" style="width:28%"></div>
+                  </div>
+                  <div class="text-slate-400 text-xs w-8 text-right">134</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-white font-semibold">SBA Community Advantage Loan</span>
+                <span class="text-green-400 text-xs font-bold">$940K facilitated</span>
+              </div>
+              <div class="space-y-1">
+                <div class="flex items-center gap-3">
+                  <div class="text-slate-400 text-xs w-16">Saw</div>
+                  <div class="flex-1 bg-slate-700 rounded-full h-2">
+                    <div class="bg-slate-400 h-2 rounded-full bar" style="width:100%"></div>
+                  </div>
+                  <div class="text-slate-400 text-xs w-8 text-right">312</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="text-slate-400 text-xs w-16">Started</div>
+                  <div class="flex-1 bg-slate-700 rounded-full h-2">
+                    <div class="bg-blue-400 h-2 rounded-full bar" style="width:38%"></div>
+                  </div>
+                  <div class="text-slate-400 text-xs w-8 text-right">119</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="text-slate-400 text-xs w-16">Finished</div>
+                  <div class="flex-1 bg-slate-700 rounded-full h-2">
+                    <div class="bg-green-400 h-2 rounded-full bar" style="width:21%"></div>
+                  </div>
+                  <div class="text-slate-400 text-xs w-8 text-right">67</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-white font-semibold">Sacramento HIRE Tax Credit</span>
+                <span class="text-amber-400 text-xs font-bold">Deadline Nov 30</span>
+              </div>
+              <div class="space-y-1">
+                <div class="flex items-center gap-3">
+                  <div class="text-slate-400 text-xs w-16">Saw</div>
+                  <div class="flex-1 bg-slate-700 rounded-full h-2">
+                    <div class="bg-slate-400 h-2 rounded-full bar" style="width:100%"></div>
+                  </div>
+                  <div class="text-slate-400 text-xs w-8 text-right">891</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="text-slate-400 text-xs w-16">Started</div>
+                  <div class="flex-1 bg-slate-700 rounded-full h-2">
+                    <div class="bg-blue-400 h-2 rounded-full bar" style="width:16%"></div>
+                  </div>
+                  <div class="text-slate-400 text-xs w-8 text-right">143</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="text-slate-400 text-xs w-16">Finished</div>
+                  <div class="flex-1 bg-slate-700 rounded-full h-2">
+                    <div class="bg-amber-400 h-2 rounded-full bar" style="width:7%"></div>
+                  </div>
+                  <div class="text-slate-400 text-xs w-8 text-right">62</div>
+                </div>
+              </div>
+              <div class="text-xs text-amber-400 mt-2 font-semibold">↑ Deadline approaching — send reminder?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Possibly unregistered / enforcement alternative -->
+      <div class="bg-gradient-to-r from-brand-900 to-slate-800 rounded-2xl p-6 border border-brand-700/50 mb-6">
+        <div class="flex items-start justify-between gap-6">
+          <div>
+            <h2 class="font-bold text-white text-lg mb-2">A gentler path to compliance</h2>
+            <p class="text-slate-300 text-sm mb-4 max-w-xl">89 businesses have no city tax record for 18+ months. Instead of sending a collection firm, CityBridge sends a plain-language message: "We noticed you might be missing a registration. Here's how to get current — no penalty if you do it now." Some cities forgive up to 90% of back penalties for voluntary registration.</p>
+            <div class="flex gap-3">
+              <button class="bg-brand-600 text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-brand-700 transition-colors">Send gentle reminder</button>
+              <button class="border border-slate-500 text-slate-300 text-sm font-semibold px-5 py-2 rounded-lg hover:bg-slate-700 transition-colors">View list (anonymized)</button>
+            </div>
+          </div>
+          <div class="text-center flex-shrink-0">
+            <div class="text-5xl font-black text-brand-400">89</div>
+            <div class="text-slate-400 text-sm mt-1">possibly unregistered</div>
+            <div class="text-green-400 text-xs font-semibold mt-1">vs. $45K enforcement cost</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy note -->
+      <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 text-xs text-slate-500 text-center">
+        All data shown here is anonymized and aggregated. Individual business data is shared with city staff only with the owner's explicit consent. CityBridge complies with CA Civil Code §1798 (CCPA).
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CityBridge — Inspections</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50:'#eff6ff', 100:'#dbeafe', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8', 800:'#1e40af', 900:'#1e3a8a' },
+            gold: { 400:'#fbbf24', 500:'#f59e0b', 600:'#d97706' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    * { font-family: 'Inter', sans-serif; }
+    .check-item input[type=checkbox]:checked + label { text-decoration: line-through; color: #94a3b8; }
+    .check-item input[type=checkbox]:checked + label::before { content: '✓ '; color: #22c55e; text-decoration: none; display: inline; }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+  <!-- Nav -->
+  <nav class="bg-white border-b border-slate-200 px-6 h-14 flex items-center justify-between fixed top-0 w-full z-50 shadow-sm">
+    <div class="flex items-center gap-6">
+      <a href="index.html" class="flex items-center gap-2">
+        <div class="w-7 h-7 bg-brand-700 rounded-md flex items-center justify-center">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"/></svg>
+        </div>
+        <span class="font-bold text-slate-900">CityBridge</span>
+      </a>
+      <span class="text-slate-300">/</span>
+      <span class="text-sm font-semibold text-slate-600">Inspections</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="text-right hidden sm:block">
+        <div class="text-sm font-semibold text-slate-800">La Tiendita Café</div>
+        <div class="text-xs text-slate-400">Sacramento · Food & Beverage</div>
+      </div>
+      <a href="dashboard.html" class="text-sm font-semibold text-brand-600 hover:underline">← Dashboard</a>
+    </div>
+  </nav>
+
+  <div class="pt-14 max-w-5xl mx-auto px-6 py-8">
+
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-slate-900">Inspections</h1>
+      <p class="text-slate-500 mt-1">Schedule, prepare, and track health, fire, and building inspections.</p>
+    </div>
+
+    <!-- Inspection type tabs -->
+    <div class="flex gap-2 mb-6">
+      <button onclick="showInspTab('health')" id="itab-health" class="px-4 py-2 rounded-lg text-sm font-semibold bg-brand-600 text-white transition-all">Health</button>
+      <button onclick="showInspTab('fire')" id="itab-fire" class="px-4 py-2 rounded-lg text-sm font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Fire</button>
+      <button onclick="showInspTab('building')" id="itab-building" class="px-4 py-2 rounded-lg text-sm font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all">Building</button>
+    </div>
+
+    <!-- HEALTH TAB -->
+    <div id="itab-content-health">
+
+      <!-- Yellow placard action plan — the demo -->
+      <div class="bg-amber-50 border-2 border-amber-400 rounded-2xl p-6 mb-6 shadow-sm">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="text-3xl">🟡</span>
+          <div>
+            <div class="font-bold text-xl text-slate-900">Conditional Pass — 3 things to fix</div>
+            <div class="text-sm text-slate-500">Inspection date: Oct 28, 2026 · Re-inspection expected within 2 weeks</div>
+          </div>
+          <div class="ml-auto">
+            <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full">Action required</span>
+          </div>
+        </div>
+
+        <div class="space-y-3 mb-5">
+          <div class="bg-white rounded-xl p-4 border border-red-100 shadow-sm">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                  <span class="text-red-600 font-black text-sm">1</span>
+                </div>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <div class="font-bold text-slate-900">Hand sink is blocked</div>
+                  <span class="bg-red-100 text-red-700 text-xs font-semibold px-2 py-0.5 rounded-full">Major</span>
+                </div>
+                <div class="text-sm text-slate-600 mb-2">Move storage equipment away from the food prep area sink. Plumbing fixtures in food prep areas must be unobstructed at all times. <span class="text-slate-400 text-xs">Cal Code Reg §113953(a)</span></div>
+                <div class="flex items-center gap-3">
+                  <span class="text-red-600 text-xs font-bold">Fix today</span>
+                  <label class="flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer">
+                    <input type="checkbox" class="rounded" /> Mark fixed
+                  </label>
+                  <label class="flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer">
+                    <input type="checkbox" class="rounded" /> Add photo proof
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-4 border border-orange-100 shadow-sm">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                  <span class="text-orange-600 font-black text-sm">2</span>
+                </div>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <div class="font-bold text-slate-900">Walk-in fridge too warm (45°F)</div>
+                  <span class="bg-orange-100 text-orange-700 text-xs font-semibold px-2 py-0.5 rounded-full">Major</span>
+                </div>
+                <div class="text-sm text-slate-600 mb-2">Refrigeration must stay at 41°F or below. The inspector measured 45°F. Call a refrigeration technician — this can also mean a faulty door seal or overfull shelves. <span class="text-slate-400 text-xs">§114002</span></div>
+                <div class="flex items-center gap-3">
+                  <span class="text-orange-600 text-xs font-bold">Fix within 24 hours</span>
+                  <label class="flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer">
+                    <input type="checkbox" class="rounded" /> Mark fixed
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-4 border border-yellow-100 shadow-sm">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                  <span class="text-yellow-700 font-black text-sm">3</span>
+                </div>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <div class="font-bold text-slate-900">Missing food handler cards (2 of 3 employees)</div>
+                  <span class="bg-yellow-100 text-yellow-700 text-xs font-semibold px-2 py-0.5 rounded-full">Minor</span>
+                </div>
+                <div class="text-sm text-slate-600 mb-2">Each employee who handles food must have a valid food handler card. Cards cost ~$7 at ServSafe.com or the county's training classes. <span class="text-slate-400 text-xs">§113948</span></div>
+                <div class="flex items-center gap-3">
+                  <span class="text-yellow-700 text-xs font-bold">Upload by Friday, Nov 8</span>
+                  <button class="text-xs bg-brand-600 text-white px-3 py-1 rounded-lg font-semibold hover:bg-brand-700">Upload cards</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-amber-100 rounded-xl p-4 text-sm text-amber-800">
+          <strong>What happens next:</strong> Once all major violations are fixed, the inspector will return. If everything passes, you get a Green placard and the result goes to your Document Vault. The re-inspection is typically unannounced — stay ready.
+        </div>
+      </div>
+
+      <!-- Always-ready weekly check -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="font-bold text-slate-900">Weekly "Stay Green" self-check</h2>
+            <p class="text-sm text-slate-500 mt-0.5">Health inspections are unannounced. 5 minutes every week keeps you ready.</p>
+          </div>
+          <div class="text-xs text-slate-400">Week of Nov 3–9</div>
+        </div>
+        <div class="space-y-3 text-sm">
+          <div class="check-item flex items-center gap-3">
+            <input type="checkbox" id="c1" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+            <label for="c1" class="cursor-pointer text-slate-700">Walk-in refrigerator at 41°F or below — check the thermometer</label>
+          </div>
+          <div class="check-item flex items-center gap-3">
+            <input type="checkbox" id="c2" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+            <label for="c2" class="cursor-pointer text-slate-700">All food handler cards on-site and unexpired</label>
+          </div>
+          <div class="check-item flex items-center gap-3">
+            <input type="checkbox" id="c3" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+            <label for="c3" class="cursor-pointer text-slate-700">Hand sinks clear and stocked with soap and paper towels</label>
+          </div>
+          <div class="check-item flex items-center gap-3">
+            <input type="checkbox" id="c4" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+            <label for="c4" class="cursor-pointer text-slate-700">All food properly labeled with date and storage instructions</label>
+          </div>
+          <div class="check-item flex items-center gap-3">
+            <input type="checkbox" id="c5" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+            <label for="c5" class="cursor-pointer text-slate-700">No pest activity — check corners, under equipment, storage areas</label>
+          </div>
+          <div class="check-item flex items-center gap-3">
+            <input type="checkbox" id="c6" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+            <label for="c6" class="cursor-pointer text-slate-700">Sanitizer buckets at correct concentration (chlorine: 50–100 ppm)</label>
+          </div>
+          <div class="check-item flex items-center gap-3">
+            <input type="checkbox" id="c7" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+            <label for="c7" class="cursor-pointer text-slate-700">Health permit posted where visible from the public seating area</label>
+          </div>
+        </div>
+        <div id="check-complete" class="hidden mt-4 bg-green-50 rounded-xl p-3 text-sm text-green-700 font-semibold text-center">
+          🟢 All checks complete — you're inspection-ready this week!
+        </div>
+      </div>
+
+      <!-- Past results -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <h2 class="font-bold text-slate-900 mb-4">Inspection history</h2>
+        <div class="space-y-3 text-sm">
+          <div class="flex items-center gap-4 py-2 border-b border-slate-100">
+            <span class="text-xl">🟡</span>
+            <div class="flex-1">
+              <div class="font-semibold text-slate-800">Oct 28, 2026 — Conditional Pass</div>
+              <div class="text-slate-400 text-xs">3 violations · Re-inspection pending</div>
+            </div>
+            <button class="text-xs text-brand-600 font-semibold hover:underline">View report</button>
+          </div>
+          <div class="flex items-center gap-4 py-2 border-b border-slate-100">
+            <span class="text-xl">🟢</span>
+            <div class="flex-1">
+              <div class="font-semibold text-slate-800">Aug 14, 2026 — Pass</div>
+              <div class="text-slate-400 text-xs">0 major violations · Stored in Document Vault</div>
+            </div>
+            <button class="text-xs text-brand-600 font-semibold hover:underline">View report</button>
+          </div>
+          <div class="flex items-center gap-4 py-2">
+            <span class="text-xl">🟢</span>
+            <div class="flex-1">
+              <div class="font-semibold text-slate-800">Feb 3, 2026 — Pass</div>
+              <div class="text-slate-400 text-xs">1 minor violation (corrected on-site) · Stored in Document Vault</div>
+            </div>
+            <button class="text-xs text-brand-600 font-semibold hover:underline">View report</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FIRE TAB -->
+    <div id="itab-content-fire" class="hidden">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <h2 class="font-bold text-lg text-slate-900">Schedule a fire inspection</h2>
+            <p class="text-sm text-slate-500 mt-0.5">Sacramento Fire Department — Permit inspections by email, then pre-inspection recommended before opening.</p>
+          </div>
+          <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">Annual due: Mar 1, 2027</span>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-5 mb-4">
+          <div class="font-semibold text-slate-700 text-sm mb-2">CityBridge will draft this email for you</div>
+          <div class="font-mono text-xs text-slate-600 leading-relaxed bg-white rounded-lg p-4 border border-slate-200">
+            <p>To: firepermits@fire.cityofsacramento.org</p>
+            <p>Subject: Fire Operational Permit Inspection Request — La Tiendita Café</p>
+            <br/>
+            <p>Hello,</p>
+            <br/>
+            <p>I am requesting a fire inspection for my operational permit renewal.</p>
+            <br/>
+            <p>Business: La Tiendita Café<br/>
+            Address: 2340 Broadway, Sacramento, CA 95818<br/>
+            Permit #: FP-2026-00412<br/>
+            Permit type: Operational — Food Service<br/>
+            Preferred dates: November 18, 20, or 21 (morning preferred)</p>
+            <br/>
+            <p>Thank you,<br/>Maria Gutierrez<br/>(916) 555-0192</p>
+          </div>
+        </div>
+        <button class="bg-brand-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-brand-700 transition-colors">Send email to Fire Dept →</button>
+      </div>
+
+      <!-- Fire checklist -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="font-bold text-slate-900">Pre-inspection checklist</h2>
+            <p class="text-sm text-slate-500 mt-0.5">From the Sacramento Fire Department's Common Violations list</p>
+          </div>
+          <a href="#" class="text-xs text-brand-600 font-semibold hover:underline">View official source →</a>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">Exits &amp; egress</div>
+            <div class="space-y-2 text-sm">
+              <div class="check-item flex items-center gap-3">
+                <input type="checkbox" id="f1" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+                <label for="f1" class="cursor-pointer text-slate-700">Exit signs lit and visible from all directions</label>
+              </div>
+              <div class="check-item flex items-center gap-3">
+                <input type="checkbox" id="f2" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+                <label for="f2" class="cursor-pointer text-slate-700">All exit doors unlocked and unobstructed</label>
+              </div>
+              <div class="check-item flex items-center gap-3">
+                <input type="checkbox" id="f3" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+                <label for="f3" class="cursor-pointer text-slate-700">Exit paths clear of storage boxes or furniture</label>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">Fire suppression</div>
+            <div class="space-y-2 text-sm">
+              <div class="check-item flex items-center gap-3">
+                <input type="checkbox" id="f4" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+                <label for="f4" class="cursor-pointer text-slate-700">Fire extinguishers serviced within the last 12 months (check tag)</label>
+              </div>
+              <div class="check-item flex items-center gap-3">
+                <input type="checkbox" id="f5" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+                <label for="f5" class="cursor-pointer text-slate-700">Hood suppression system last service within 6 months</label>
+              </div>
+              <div class="check-item flex items-center gap-3">
+                <input type="checkbox" id="f6" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+                <label for="f6" class="cursor-pointer text-slate-700">Sprinkler heads unobstructed (18" clearance below)</label>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">Kitchen hood</div>
+            <div class="space-y-2 text-sm">
+              <div class="check-item flex items-center gap-3">
+                <input type="checkbox" id="f7" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+                <label for="f7" class="cursor-pointer text-slate-700">Grease filters cleaned (no visible buildup)</label>
+              </div>
+              <div class="check-item flex items-center gap-3">
+                <input type="checkbox" id="f8" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+                <label for="f8" class="cursor-pointer text-slate-700">Exhaust fan operating at proper velocity</label>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">Electrical &amp; storage</div>
+            <div class="space-y-2 text-sm">
+              <div class="check-item flex items-center gap-3">
+                <input type="checkbox" id="f9" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+                <label for="f9" class="cursor-pointer text-slate-700">No extension cords used as permanent wiring</label>
+              </div>
+              <div class="check-item flex items-center gap-3">
+                <input type="checkbox" id="f10" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+                <label for="f10" class="cursor-pointer text-slate-700">Electrical panels accessible and labeled</label>
+              </div>
+              <div class="check-item flex items-center gap-3">
+                <input type="checkbox" id="f11" class="w-4 h-4 text-brand-600 rounded cursor-pointer" />
+                <label for="f11" class="cursor-pointer text-slate-700">Flammable materials stored in approved containers</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 bg-amber-50 rounded-lg p-3 text-xs text-amber-700">
+          <strong>This helps you prepare — it is not a guarantee of passing.</strong> The inspector uses the Sacramento Fire Code and may check items not on this list.
+        </div>
+      </div>
+    </div>
+
+    <!-- BUILDING TAB -->
+    <div id="itab-content-building" class="hidden">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="font-bold text-lg text-slate-900">Building inspections</h2>
+            <p class="text-sm text-slate-500 mt-0.5">Required at each stage of your patio construction project.</p>
+          </div>
+          <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">1 active project</span>
+        </div>
+
+        <div class="mb-5">
+          <div class="font-semibold text-slate-800 mb-1">Outdoor Patio Enclosure · Permit #BP-2026-01834</div>
+          <div class="text-sm text-slate-500 mb-4">Permit expires: Apr 23, 2027 (Day 10 of 180)</div>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 p-3 bg-green-50 rounded-lg border border-green-100">
+              <span class="text-green-500 text-lg">✓</span>
+              <div class="flex-1">
+                <div class="font-semibold text-sm text-slate-800">Footing inspection — Passed</div>
+                <div class="text-xs text-slate-400">Oct 28, 2026</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200 animate-pulse">
+              <span class="text-blue-500 text-lg">→</span>
+              <div class="flex-1">
+                <div class="font-semibold text-sm text-blue-800">Framing inspection — Next</div>
+                <div class="text-xs text-blue-500">Required before covering framing with drywall or sheathing</div>
+              </div>
+              <button onclick="bookBuilding()" class="bg-brand-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-brand-700">Book now</button>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
+              <span class="text-slate-400 text-lg">○</span>
+              <div class="flex-1">
+                <div class="font-semibold text-sm text-slate-500">Final inspection</div>
+                <div class="text-xs text-slate-400">Required before opening patio to customers</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="book-confirm" class="hidden bg-green-50 border border-green-200 rounded-xl p-4 text-sm text-green-800">
+          <strong>Inspection booked!</strong> Framing inspection confirmed for November 12, 2026 at 10:00 AM. Added to your calendar. Inspector: Carlos M., Building Division.
+        </div>
+
+        <div class="bg-yellow-50 rounded-lg p-3 text-xs text-yellow-700 mt-4">
+          <strong>Permit expires in 170 days.</strong> If the final inspection isn't done before then, you'll need to apply for an extension or a new permit. CityBridge will remind you at 150 days.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function showInspTab(tab) {
+      ['health','fire','building'].forEach(t => {
+        document.getElementById('itab-content-' + t).classList.add('hidden');
+        document.getElementById('itab-' + t).className = 'px-4 py-2 rounded-lg text-sm font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-all';
+      });
+      document.getElementById('itab-content-' + tab).classList.remove('hidden');
+      document.getElementById('itab-' + tab).className = 'px-4 py-2 rounded-lg text-sm font-semibold bg-brand-600 text-white transition-all';
+    }
+
+    function bookBuilding() {
+      document.getElementById('book-confirm').classList.remove('hidden');
+    }
+
+    // Weekly check completion
+    const checkboxes = document.querySelectorAll('.check-item input[type=checkbox]');
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        const allChecked = Array.from(document.querySelectorAll('#itab-content-health .check-item input')).every(c => c.checked);
+        const banner = document.getElementById('check-complete');
+        if (banner) banner.classList.toggle('hidden', !allChecked);
+      });
+    });
+  </script>
+</body>
+</html>
