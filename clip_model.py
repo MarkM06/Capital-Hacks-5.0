@@ -17,24 +17,24 @@ CLIP_MODEL = "openai/clip-vit-base-patch32"   # downloads ~600 MB on first run
 # Several phrasings per label make CLIP more reliable. Edit the wording, keep the label names.
 PROMPTS = {
     "dry road": [
-        "a traffic camera photo of a dry highway with bare pavement",
-        "a highway with clear dry lanes",
+        "a traffic camera photo of a dry highway with bare pavement in daylight",
+        "a highway at night with no snow or slush visible anywhere on the driving lanes",
     ],
     "wet road": [
-        "a traffic camera photo of a wet highway",
-        "a highway with wet shiny pavement",
+        "a nighttime traffic camera on a cleared highway, bare wet lanes with vehicle headlights, snow only at road edges",
+        "a highway at night after snowplows cleared the road, mostly bare wet pavement with ice risk, driving lanes clear of snow",
     ],
     "slush / partly covered": [
-        "a traffic camera photo of a highway with slush and plowed lanes",
-        "a highway partly covered with snow and tire tracks",
+        "a daytime traffic camera of a highway with snow and slush actively covering the driving lanes",
+        "a road where snow has not been fully cleared, with visible snow patches across the travel lanes in daylight",
     ],
     "snow-covered": [
-        "a traffic camera photo of a highway completely covered in snow",
-        "a road with snow covering all the lanes",
+        "a traffic camera photo of a highway completely covered in deep snow with no visible pavement",
+        "a road buried in snow with all lanes fully covered and no tire tracks visible",
     ],
     "fog / low visibility": [
         "a traffic camera photo of a highway in thick fog",
-        "a highway with very low visibility",
+        "a highway with very low visibility due to fog or mist",
     ],
     "camera obstructed": [
         "a blurry traffic camera image with a dirty or blocked lens",
