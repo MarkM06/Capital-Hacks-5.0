@@ -6,6 +6,7 @@ Run (after python frostline.py):
 Reads every output/<camera_id>/results.json written by frostline.py.
 """
 import json
+import time
 from pathlib import Path
 
 import altair as alt
@@ -48,8 +49,29 @@ chosen = cams if choice == STORY else [c for c in cams if c["name"] == choice]
 frames = [(c, s) for c in chosen for s in c["snapshots"]]
 
 labels = [f"{s['time_local']}  ·  {c['short']}" for c, s in frames]
-i = st.select_slider("Drag to play the storm", options=list(range(len(frames))), value=0,
-                     format_func=lambda k: labels[k])
+
+# --- Play button: steps the slider forward every 2 s ----------------------
+ss = st.session_state
+if ss.get("view") != choice:          # new view -> start from the beginning
+    ss.view, ss.idx, ss.playing = choice, 0, False
+if "next_idx" in ss:                  # Play advanced one step on the last run
+    ss.idx = ss.pop("next_idx")
+ss.idx = min(ss.get("idx", 0), len(frames) - 1)
+
+
+def toggle_play():
+    ss.playing = not ss.get("playing", False)
+    if ss.playing and ss.idx >= len(frames) - 1:
+        ss.idx = 0                    # at the end -> replay from the start
+
+
+b_col, s_col = st.columns([1, 9])
+with b_col:
+    st.write("")
+    st.button("⏸ Pause" if ss.get("playing") else "▶ Play", on_click=toggle_play, width="stretch")
+with s_col:
+    i = st.select_slider("Drag to play the storm", options=list(range(len(frames))), key="idx",
+                         format_func=lambda k: labels[k])
 cam, s = frames[i]
 
 st.subheader(cam["name"])
@@ -141,3 +163,12 @@ with m2:
     pts = pd.DataFrame([{"lat": c["lat"], "lon": c["lon"]} for c in cams if c.get("lat")])
     if not pts.empty:
         st.map(pts, zoom=6)
+
+# --- Play: wait 2 s, then move to the next snapshot -----------------------
+if ss.get("playing"):
+    if i < len(frames) - 1:
+        time.sleep(2)
+        ss.next_idx = i + 1
+    else:
+        ss.playing = False            # reached the end
+    st.rerun()
