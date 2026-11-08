@@ -18,15 +18,15 @@ CLIP_MODEL = "openai/clip-vit-base-patch32"   # downloads ~600 MB on first run
 PROMPTS = {
     "dry road": [
         "a traffic camera photo of a dry highway with bare pavement in daylight",
-        "a highway at night with no snow or slush visible anywhere on the driving lanes",
+        "a highway at night with no snow visible on the driving lanes",
     ],
     "wet road": [
         "a nighttime traffic camera on a cleared highway, bare wet lanes with vehicle headlights, snow only at road edges",
-        "a highway at night after snowplows cleared the road, mostly bare wet pavement with ice risk, driving lanes clear of snow",
+        "a traffic camera showing a highway where the lanes are almost completely bare with minimal snow remaining",
     ],
     "slush / partly covered": [
-        "a daytime traffic camera of a highway with snow and slush actively covering the driving lanes",
-        "a road where snow has not been fully cleared, with visible snow patches across the travel lanes in daylight",
+        "a traffic camera showing a highway with significant snow covering most of the travel lanes",
+        "a highway with snow and slush visible across the road surface with tire tracks through it",
     ],
     "snow-covered": [
         "a traffic camera photo of a highway completely covered in deep snow with no visible pavement",
