@@ -23,18 +23,30 @@ Fields:
 """
 
 CAMERAS = {
-    # Snow building up. Hiroshi: fill in once the images are in Images_growth/
+    # Snow building up. Iowa DOT camera; times on the images are already local (Central)
     "growth": {
-        "name": "TODO: road + location of the snow-growth camera",
-        "short": "TODO SHORT NAME",
+        "name": "I-29 at Sidney (RWIS39), Iowa",
+        "short": "I-29 SIDNEY",
         "folder": "Images_growth",
         "readings": "",
-        "utc_offset_hours": -5,
-        "lat": 0.0, "lon": 0.0,
-        "camera_box": None,        # None = use the whole image
-        "lanes": None,             # REQUIRED: list of (x, y) points
-        "snow_reference": None,    # list of (x, y) points, OR set snow_threshold
-        "snow_threshold": None,    # e.g. 170 (only if no snow_reference)
+        "utc_offset_hours": 0,
+        "lat": 40.75, "lon": -95.65,
+        "camera_box": (0, 32, 1000, 566),   # cuts off the black text bar at the top
+        # Travel lanes nearest the camera, between the white edge line and the yellow median line
+        "lanes": [(195, 250), (295, 250), (990, 557), (990, 566), (530, 566)],
+        # Camera angle moves between frames: per-image outlines (falls back to "lanes")
+        "lanes_per_image": {
+            "I29_Sidney_2024-01-13-12_54_57.png": [(215, 250), (300, 250), (990, 555), (990, 566), (548, 566)],
+        },
+        "snow_reference": None,
+        # Exposure changes a lot between days, so frames that have snow use the snowy verge
+        # left of the road IN THAT FRAME as the reference (same 80% rule as the LIE camera)
+        "snow_reference_per_image": {
+            "I29_Sidney_2024-01-12-07_51_48.png": [(20, 330), (110, 330), (110, 470), (20, 470)],
+            "I29_Sidney_2024-01-12-12_53_53.png": [(20, 330), (110, 330), (110, 470), (20, 470)],
+            "I29_Sidney_2024-01-13-12_54_57.png": [(20, 330), (110, 330), (110, 470), (20, 470)],
+        },
+        "snow_threshold": 200,     # frames without a reference (Oct: no snow anywhere): fixed brightness
         "story_order": 1,
     },
     # Plows clearing the road. Done and tested: lanes 100 -> 88 -> 24 -> 11 -> 12 %

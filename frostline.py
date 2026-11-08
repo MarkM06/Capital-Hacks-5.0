@@ -127,7 +127,7 @@ def run_camera(cam_id, cam, clip):
     if not images:
         print(f"[{cam_id}] skipped: no images in {folder}")
         return
-    if not cam.get("lanes") or not (cam.get("snow_reference") or cam.get("snow_threshold")):
+    if not (cam.get("lanes") or cam.get("lanes_per_image")) or not (cam.get("snow_reference") or cam.get("snow_threshold")):
         print(f"[{cam_id}] skipped: set 'lanes' and 'snow_reference' (or 'snow_threshold') in cameras.py")
         return
     images.sort(key=lambda p: (snapshot_time_utc(p) or datetime.min, p.name))
@@ -140,9 +140,18 @@ def run_camera(cam_id, cam, clip):
     rows = []
     for path in images:
         image = Image.open(path).convert("RGB")
-        cover, snowy = lane_snow_cover(image, cam)
+        # Optional per-image lane outline (camera angle moves between frames); falls back to "lanes"
+        img_cam = {**cam, "lanes": (cam.get("lanes_per_image") or {}).get(path.name) or cam.get("lanes")}
+        # Optional per-image snow reference (snow beside the road in that frame); overrides snow_threshold
+        img_ref = (cam.get("snow_reference_per_image") or {}).get(path.name)
+        if img_ref:
+            img_cam.update(snow_reference=img_ref, snow_threshold=None)
+        if not img_cam["lanes"]:
+            print(f"  {path.name}: skipped, no lane outline (add it to lanes_per_image or lanes)")
+            continue
+        cover, snowy = lane_snow_cover(image, img_cam)
         overlay_name = path.stem + "_overlay.jpg"
-        save_overlay(image, snowy, cam, out_dir / "overlays" / overlay_name)
+        save_overlay(image, snowy, img_cam, out_dir / "overlays" / overlay_name)
 
         t_utc = snapshot_time_utc(path)
         t_local = t_utc + timedelta(hours=cam["utc_offset_hours"]) if t_utc else None
