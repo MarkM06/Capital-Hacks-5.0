@@ -89,7 +89,7 @@ cam, s = frames[i]
 
 # --- Story banner (Full storm story view only) -----------------------------
 STORY_BANNERS = {
-    1: "Part 1: Snow builds up on the road",
+    1: "Part 1: Blizzard hits I-29, Iowa",
     2: "Part 2: Plows clear the lanes, but it's still below freezing",
 }
 if choice == STORY and cam.get("story_order") in STORY_BANNERS:
