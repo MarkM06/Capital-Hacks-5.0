@@ -21,12 +21,23 @@ st.markdown(
     """
     <style>
       .block-container {padding-top: 1.5rem;}
-      .pill {display:inline-block;padding:4px 12px;border-radius:999px;font-weight:700;color:white;}
+      .pill {display:inline-block;padding:6px 18px;border-radius:999px;font-weight:800;color:white;font-size:1.5rem;}
+      .prio {font-size:1.5rem;font-weight:700;}
+      /* Projector-friendly: bigger metric labels and numbers, no "..." cut-off */
+      [data-testid="stMetricLabel"] p {font-size:1.3rem !important;font-weight:600;}
+      [data-testid="stMetricValue"] {font-size:2.8rem !important;font-weight:700;line-height:1.15;}
+      [data-testid="stMetricValue"] p {font-size:2.8rem !important;font-weight:700;line-height:1.15;}
+      [data-testid="stMetricValue"] div, [data-testid="stMetricValue"] p {white-space:normal !important;
+             overflow:visible !important;text-overflow:clip !important;}
+      [data-testid="stMarkdownContainer"] p {font-size:1.15rem;}
+      [data-testid="stSlider"] [data-testid="stSliderThumbValue"],
+      [data-testid="stSlider"] [data-testid="stSliderTickBarMin"],
+      [data-testid="stSlider"] [data-testid="stSliderTickBarMax"] {font-size:1.1rem;}
       .HIGH {background:#d62828;} .MEDIUM {background:#f77f00;} .LOW {background:#2a9d8f;}
       .story {font-size:2rem;font-weight:800;color:white;padding:14px 22px;border-radius:10px;margin:6px 0 10px 0;}
       .part1 {background:#1d4e89;} .part2 {background:#7b2cbf;}
-      .sign {background:#111;color:#ffb703;font-family:monospace;font-size:1.25rem;
-             padding:14px 18px;border-radius:8px;letter-spacing:1px;}
+      .sign {background:#111;color:#ffb703;font-family:monospace;font-size:1.8rem;
+             padding:16px 20px;border-radius:8px;letter-spacing:1px;}
     </style>
     """,
     unsafe_allow_html=True,
@@ -108,7 +119,7 @@ c4.metric("Ground snow", f"{s['ground_snow_in']} in" if s["ground_snow_in"] != "
 c5.metric("Hazard score", f"{s['hazard_score']}/100")
 
 st.markdown(
-    f"Priority: <span class='pill {s['priority']}'>{s['priority']}</span>"
+    f"<span class='prio'>Priority:</span> <span class='pill {s['priority']}'>{s['priority']}</span>"
     + ("&nbsp;&nbsp;<span class='pill HIGH'>⚠ ICE RISK: lanes clear but below freezing, pre-treat</span>"
        if s["ice_risk"] else ""),
     unsafe_allow_html=True,
@@ -137,18 +148,18 @@ st.divider()
 df = pd.DataFrame(cam["snapshots"])
 df["time"] = pd.to_datetime(df["time_local"], errors="coerce")
 st.markdown("#### Lane snow cover over time")
-base = alt.Chart(df).encode(x=alt.X("time:T", title="Local time"))
+base = alt.Chart(df).encode(x=alt.X("time:T", title="Local time", axis=alt.Axis(format="%b %d %H:%M", labelAngle=0, labelFontSize=15, titleFontSize=17)))
 layers = [base.mark_line(point=True, color="#1f77b4", strokeWidth=3).encode(
-    y=alt.Y("lane_snow_cover_pct:Q", title="Lane snow cover (%)", scale=alt.Scale(domain=[0, 100])),
+    y=alt.Y("lane_snow_cover_pct:Q", title="Lane snow cover (%)", axis=alt.Axis(labelFontSize=15, titleFontSize=17), scale=alt.Scale(domain=[0, 100])),
     tooltip=["time_local", "lane_snow_cover_pct", "condition"])]
 has_depth = pd.to_numeric(df["ground_snow_in"], errors="coerce").notna().any()
 if has_depth:
     df["ground_snow_in"] = pd.to_numeric(df["ground_snow_in"], errors="coerce")
     layers.append(base.mark_line(point=alt.OverlayMarkDef(color="#999"), color="#999", strokeDash=[6, 4]).encode(
-        y=alt.Y("ground_snow_in:Q", title="Ground snow depth (in)"), tooltip=["time_local", "ground_snow_in"]))
+        y=alt.Y("ground_snow_in:Q", title="Ground snow depth (in)", axis=alt.Axis(labelFontSize=15, titleFontSize=17)), tooltip=["time_local", "ground_snow_in"]))
 now_row = df[df["image"] == s["image"]]
 layers.append(alt.Chart(now_row).mark_rule(color="#d62828").encode(x="time:T"))
-chart = alt.layer(*layers).resolve_scale(y="independent").properties(height=320)
+chart = (alt.layer(*layers).resolve_scale(y="independent").properties(height=340))
 st.altair_chart(chart, width="stretch")
 if has_depth:
     st.caption("Blue: lane snow cover (left axis). Grey dashed: ground snow depth from the nearby weather station (right axis).")
