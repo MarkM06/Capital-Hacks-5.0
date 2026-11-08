@@ -1,0 +1,143 @@
+"""
+Frostline demo dashboard. OWNER: Samay.
+
+Run (after python frostline.py):
+    python -m streamlit run dashboard.py
+Reads every output/<camera_id>/results.json written by frostline.py.
+"""
+import json
+from pathlib import Path
+
+import altair as alt
+import pandas as pd
+import streamlit as st
+from PIL import Image
+
+HERE = Path(__file__).resolve().parent
+
+st.set_page_config(page_title="Frostline", page_icon="❄️", layout="wide")
+st.markdown(
+    """
+    <style>
+      .block-container {padding-top: 1.5rem;}
+      .pill {display:inline-block;padding:4px 12px;border-radius:999px;font-weight:700;color:white;}
+      .HIGH {background:#d62828;} .MEDIUM {background:#f77f00;} .LOW {background:#2a9d8f;}
+      .sign {background:#111;color:#ffb703;font-family:monospace;font-size:1.25rem;
+             padding:14px 18px;border-radius:8px;letter-spacing:1px;}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.title("❄️ Frostline")
+st.caption("States already own thousands of eyes on the road. Frostline teaches them to read the road.")
+
+# --- Load every camera's results ------------------------------------------
+cams = []
+for f in sorted((HERE / "output").glob("*/results.json")):
+    cams.append(json.loads(f.read_text(encoding="utf-8")))
+if not cams:
+    st.error("No results yet. Run `python frostline.py` first, then refresh this page.")
+    st.stop()
+cams.sort(key=lambda c: c.get("story_order", 99))
+
+# Flatten into one timeline: (camera, snapshot)
+STORY = "▶ Full storm story (all cameras)"
+choice = st.radio("View", [STORY] + [c["name"] for c in cams], horizontal=True)
+chosen = cams if choice == STORY else [c for c in cams if c["name"] == choice]
+frames = [(c, s) for c in chosen for s in c["snapshots"]]
+
+labels = [f"{s['time_local']}  ·  {c['short']}" for c, s in frames]
+i = st.select_slider("Drag to play the storm", options=list(range(len(frames))), value=0,
+                     format_func=lambda k: labels[k])
+cam, s = frames[i]
+
+st.subheader(cam["name"])
+
+# --- Camera vs what Frostline sees ----------------------------------------
+left, right = st.columns(2)
+with left:
+    st.markdown("**Live camera**")
+    img = Image.open(HERE / cam["image_folder"] / s["image"])
+    if cam.get("camera_box"):
+        img = img.crop(tuple(cam["camera_box"]))
+    st.image(img, width="stretch")
+with right:
+    st.markdown("**What Frostline sees** (blue = snow on the travel lanes)")
+    st.image(str(HERE / "output" / cam["camera_id"] / "overlays" / s["overlay"]), width="stretch")
+
+# --- Key numbers -----------------------------------------------------------
+c1, c2, c3, c4, c5 = st.columns(5)
+c1.metric("Condition", s["condition"].title())
+c2.metric("Lane snow cover", f"{s['lane_snow_cover_pct']:.0f}%")
+c3.metric("Air temp", f"{s['air_temp_f']}°F" if s["air_temp_f"] != "" else "—")
+c4.metric("Ground snow", f"{s['ground_snow_in']} in" if s["ground_snow_in"] != "" else "—")
+c5.metric("Hazard score", f"{s['hazard_score']}/100")
+
+st.markdown(
+    f"Priority: <span class='pill {s['priority']}'>{s['priority']}</span>"
+    + ("&nbsp;&nbsp;<span class='pill HIGH'>⚠ ICE RISK: lanes clear but below freezing, pre-treat</span>"
+       if s["ice_risk"] else ""),
+    unsafe_allow_html=True,
+)
+if s["clip_label"]:
+    st.markdown(
+        f"**AI check (CLIP):** {s['clip_label']} ({float(s['clip_confidence']):.0%}) · "
+        f"snow score {float(s['clip_snow_score']):.2f} · "
+        + ("✅ both methods agree" if s["agreement"] == "agree" else "🟡 methods disagree: needs human review")
+    )
+else:
+    st.caption("AI check (CLIP) not run. Run `python frostline.py` without --no-clip.")
+
+# --- Suggested sign message ------------------------------------------------
+st.markdown("#### Suggested 511 / message-sign text")
+if s["sign_message"]:
+    st.markdown(f"<div class='sign'>{s['sign_message']}</div>", unsafe_allow_html=True)
+    if st.button("✅ Operator approves → send to 511", key=f"approve_{i}"):
+        st.success(f"Sent at {s['time_local'][11:]} (demo). Nothing is posted without a human approving it.")
+else:
+    st.write("No message needed.")
+
+st.divider()
+
+# --- Chart for the current camera -----------------------------------------
+df = pd.DataFrame(cam["snapshots"])
+df["time"] = pd.to_datetime(df["time_local"], errors="coerce")
+st.markdown("#### Lane snow cover over time")
+base = alt.Chart(df).encode(x=alt.X("time:T", title="Local time"))
+layers = [base.mark_line(point=True, color="#1f77b4", strokeWidth=3).encode(
+    y=alt.Y("lane_snow_cover_pct:Q", title="Lane snow cover (%)", scale=alt.Scale(domain=[0, 100])),
+    tooltip=["time_local", "lane_snow_cover_pct", "condition"])]
+has_depth = pd.to_numeric(df["ground_snow_in"], errors="coerce").notna().any()
+if has_depth:
+    df["ground_snow_in"] = pd.to_numeric(df["ground_snow_in"], errors="coerce")
+    layers.append(base.mark_line(point=alt.OverlayMarkDef(color="#999"), color="#999", strokeDash=[6, 4]).encode(
+        y=alt.Y("ground_snow_in:Q", title="Ground snow depth (in)"), tooltip=["time_local", "ground_snow_in"]))
+now_row = df[df["image"] == s["image"]]
+layers.append(alt.Chart(now_row).mark_rule(color="#d62828").encode(x="time:T"))
+chart = alt.layer(*layers).resolve_scale(y="independent").properties(height=320)
+st.altair_chart(chart, width="stretch")
+if has_depth:
+    st.caption("Blue: lane snow cover (left axis). Grey dashed: ground snow depth from the nearby weather station (right axis).")
+
+first, last = cam["snapshots"][0], cam["snapshots"][-1]
+hours = (df["time"].iloc[-1] - df["time"].iloc[0]).total_seconds() / 3600 if df["time"].notna().all() else 0
+direction = "rose" if last["lane_snow_cover_pct"] > first["lane_snow_cover_pct"] else "fell"
+report = (f"**Storm report ({cam['short']}):** lane snow cover {direction} from "
+          f"{first['lane_snow_cover_pct']:.0f}% to {last['lane_snow_cover_pct']:.0f}% in {hours:.1f} hours.")
+if last["ice_risk"]:
+    report += f" Lanes are open, but it is {last['air_temp_f']}°F, so Frostline keeps an ice-risk warning here."
+st.info(report)
+
+# --- Treat-first list + map ------------------------------------------------
+m1, m2 = st.columns([3, 2])
+with m1:
+    st.markdown("#### Treat-first list (latest snapshot per camera)")
+    latest = pd.DataFrame([{**c["snapshots"][-1], "camera": c["short"]} for c in cams])
+    cols = ["camera", "time_local", "condition", "lane_snow_cover_pct", "clip_label", "hazard_score", "priority", "ice_risk"]
+    st.dataframe(latest.sort_values("hazard_score", ascending=False)[cols], hide_index=True, width="stretch")
+with m2:
+    st.markdown("#### Cameras")
+    pts = pd.DataFrame([{"lat": c["lat"], "lon": c["lon"]} for c in cams if c.get("lat")])
+    if not pts.empty:
+        st.map(pts, zoom=6)
