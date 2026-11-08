@@ -23,6 +23,8 @@ st.markdown(
       .block-container {padding-top: 1.5rem;}
       .pill {display:inline-block;padding:4px 12px;border-radius:999px;font-weight:700;color:white;}
       .HIGH {background:#d62828;} .MEDIUM {background:#f77f00;} .LOW {background:#2a9d8f;}
+      .story {font-size:2rem;font-weight:800;color:white;padding:14px 22px;border-radius:10px;margin:6px 0 10px 0;}
+      .part1 {background:#1d4e89;} .part2 {background:#7b2cbf;}
       .sign {background:#111;color:#ffb703;font-family:monospace;font-size:1.25rem;
              padding:14px 18px;border-radius:8px;letter-spacing:1px;}
     </style>
@@ -73,6 +75,15 @@ with s_col:
     i = st.select_slider("Drag to play the storm", options=list(range(len(frames))), key="idx",
                          format_func=lambda k: labels[k])
 cam, s = frames[i]
+
+# --- Story banner (Full storm story view only) -----------------------------
+STORY_BANNERS = {
+    1: "Part 1: Snow builds up on the road",
+    2: "Part 2: Plows clear the lanes, but it's still below freezing",
+}
+if choice == STORY and cam.get("story_order") in STORY_BANNERS:
+    part = cam["story_order"]
+    st.markdown(f"<div class='story part{part}'>{STORY_BANNERS[part]}</div>", unsafe_allow_html=True)
 
 st.subheader(cam["name"])
 
