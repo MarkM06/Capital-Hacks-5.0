@@ -28,7 +28,7 @@ CAMERAS = {
         "name": "I-29 at Sidney (RWIS39), Iowa",
         "short": "I-29 SIDNEY",
         "folder": "Images_growth",
-        "readings": "",
+        "readings": "readings_growth.csv",   # Open-Meteo history, made by tools/fetch_weather.py
         "utc_offset_hours": 0,
         "lat": 40.75, "lon": -95.65,
         "camera_box": (0, 32, 1000, 566),   # cuts off the black text bar at the top
